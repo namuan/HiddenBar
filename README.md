@@ -10,9 +10,8 @@
 	</a>
 </p>
 
-## Hidden Bar (Unofficial Maintenance)
-Hidden Bar (Unofficial Maintenance) lets you hide menu bar items to give your Mac a cleaner look.
-This is an unofficial maintenance for the discontinued original [Hidden Bar](https://github.com/dwarvesf/hidden).
+## Hidden Bar
+Hidden Bar lets you hide menu bar items to give your Mac a cleaner look.
 
 <p align="center">
 	<img width="400" src="img/screen1.png">
@@ -23,9 +22,7 @@ This is an unofficial maintenance for the discontinued original [Hidden Bar](htt
 
 ###  App Store
 
-This verison of Hidden Bar is not available on the App Store.
-
-Original Version (v1.8): [![AppStore](img/appstore.svg)](https://itunes.apple.com/app/hidden-bar/id1452453066)
+This version of Hidden Bar is not available on the App Store.
 
 ### Pre-built Packages
 
@@ -34,8 +31,6 @@ Pre-built packages of Hidden Bar can be found [here](https://github.com/UeharaYo
 Notice: This version of Hidden Bar is NOT notarized. The GateKeeper will flag any non-notarized App as Untrusted and therefore prevent it from opening. Although you can override GateKeeper's decision, it is considered a bad habit while using your computer. Besides notarizing an app requires enrollments of Apple Developer Program, which currently is not the case for me. 
 
 For security reasons, it is STRONGLY RECOMMENDED to build your own copies from source, which means you might also inspect the code yourself.
-
-For packages of the original Hidden Bar (up to v1.9), check out the original repo [here](https://github.com/dwarvesf/hidden).
 
 #### Build from Source
 
@@ -50,8 +45,6 @@ To build this version of Hidden Bar, you have to have Xcode installed.
 ./install.command
 ```
 
-See [INSTALL.md](INSTALL.md) for detailed build and installation instructions.
-
 ## 🕹 Usage
 
 The usage of version of Hidden Bar is slightly different from the original one.
@@ -65,32 +58,9 @@ For more usage info, click the Help button in the Settings interfaces.
 	<img src="img/tutorial.gif">
 </p>
 
-## 🔍 Troubleshooting
-
-Hidden Bar includes comprehensive logging to help diagnose any issues.
-
-**View logs:**
-```bash
-./view-logs.command
-```
-
-Logs are stored in: `~/Library/Application Support/HiddenBar/Logs/`
-
-See [LOGGING.md](LOGGING.md) for complete logging documentation.
-
-## ✨<a href="https://github.com/dwarvesf/hidden/graphs/contributors">Contributions</a>
+## ✨<a href="https://github.com/UeharaYou/HiddenBar/graphs/contributors">Contributions</a>
 
 Please read [this](CONTRIBUTING.md) before you make a contribution.
-
-### Unofficial Maintenance Acknowledgements
-
-Sincere gratitudes towards all contributors of the original Hidden Bar for your previous works.
-
-### Original Acknowledgements
-
-This project exists thanks to all the people who contribute. Thank you guys so much 👏
-
-[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/0)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/0)[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/1)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/1)[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/2)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/2)[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/3)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/3)[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/4)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/4)[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/5)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/5)[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/6)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/6)[![](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/images/7)](https://sourcerer.io/fame/phucledien/dwarvesf/hidden/links/7)
 
 ## Requirements
 macOS version >= 10.13
