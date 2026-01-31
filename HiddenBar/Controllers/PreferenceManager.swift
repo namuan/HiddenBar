@@ -99,10 +99,13 @@ enum PreferenceManager {
     
     static var isShowPreference: Bool {
         get {
-            UserDefaults.standard.bool(forKey: PreferenceKeys.isShowPreference)
+            let value = UserDefaults.standard.bool(forKey: PreferenceKeys.isShowPreference)
+            logDebug("isShowPreference: \(value)", category: "PreferenceManager")
+            return value
         }
         
         set {
+            logInfo("Setting isShowPreference to: \(newValue)", category: "PreferenceManager")
             UserDefaults.standard.set(newValue, forKey: PreferenceKeys.isShowPreference)
             
             NotificationCenter.default.post(Notification(name: NotificationNames.prefsChanged, object: PreferenceManager.isShowPreference))
@@ -112,21 +115,25 @@ enum PreferenceManager {
     static var statusBarPolicy: StatusBarPolicy {
         get {
             let value = UserDefaults.standard.integer(forKey: PreferenceKeys.statusBarPolicy)
+            let policy: StatusBarPolicy
             switch (value) {
             case 1:
-                return .fullExpand
+                policy = .fullExpand
             case 2:
-                return .partialExpand
+                policy = .partialExpand
             case 0:
-                return .collapsed
+                policy = .collapsed
             default:
+                logWarning("Preference \"statusBarPolicy\" value \(value) undefined, defaulting to collapsed", category: "PreferenceManager")
                 NSLog("Warning: Preference \"statusBarPolicy\" value undefined, default to 0")
-                return .collapsed
+                policy = .collapsed
             }
-            
+            logDebug("statusBarPolicy: \(policy)", category: "PreferenceManager")
+            return policy
         }
         
         set {
+            logInfo("Setting statusBarPolicy to: \(newValue)", category: "PreferenceManager")
             var num = -1;
             switch (newValue) {
             case .fullExpand:
@@ -144,10 +151,13 @@ enum PreferenceManager {
     
     static var isUsingFullStatusBar: Bool {
         get {
-            UserDefaults.standard.bool(forKey: PreferenceKeys.isUsingFullStatusBar)
+            let value = UserDefaults.standard.bool(forKey: PreferenceKeys.isUsingFullStatusBar)
+            logDebug("isUsingFullStatusBar: \(value)", category: "PreferenceManager")
+            return value
         }
         
         set {
+            logInfo("Setting isUsingFullStatusBar to: \(newValue)", category: "PreferenceManager")
             UserDefaults.standard.set(newValue, forKey: PreferenceKeys.isUsingFullStatusBar)
             
             NotificationCenter.default.post(Notification(name: NotificationNames.prefsChanged, object: PreferenceManager.isUsingFullStatusBar))
@@ -156,10 +166,13 @@ enum PreferenceManager {
     
     static var isEditMode: Bool {
         get {
-            UserDefaults.standard.bool(forKey: PreferenceKeys.isEditMode)
+            let value = UserDefaults.standard.bool(forKey: PreferenceKeys.isEditMode)
+            logDebug("isEditMode: \(value)", category: "PreferenceManager")
+            return value
         }
         
         set {
+            logInfo("Setting isEditMode to: \(newValue)", category: "PreferenceManager")
             UserDefaults.standard.set(newValue, forKey: PreferenceKeys.isEditMode)
             
             NotificationCenter.default.post(Notification(name: NotificationNames.prefsChanged, object: PreferenceManager.isEditMode))

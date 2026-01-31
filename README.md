@@ -45,6 +45,13 @@ To build this version of Hidden Bar, you have to have Xcode installed.
 2. Reslove the team certificate error. You have to sign your own copies yourself with your own cert. It is not necessary to be a member of Apple Developer Program to build this project.
 3. Build the project in Xcode.
 
+**Quick Install:** Use the automated installation script:
+```bash
+./install.command
+```
+
+See [INSTALL.md](INSTALL.md) for detailed build and installation instructions.
+
 ## 🕹 Usage
 
 The usage of version of Hidden Bar is slightly different from the original one.
@@ -57,6 +64,19 @@ For more usage info, click the Help button in the Settings interfaces.
 <p align="center">
 	<img src="img/tutorial.gif">
 </p>
+
+## 🔍 Troubleshooting
+
+Hidden Bar includes comprehensive logging to help diagnose any issues.
+
+**View logs:**
+```bash
+./view-logs.command
+```
+
+Logs are stored in: `~/Library/Application Support/HiddenBar/Logs/`
+
+See [LOGGING.md](LOGGING.md) for complete logging documentation.
 
 ## ✨<a href="https://github.com/dwarvesf/hidden/graphs/contributors">Contributions</a>
 

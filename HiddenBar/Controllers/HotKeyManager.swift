@@ -12,13 +12,21 @@ import HotKey
 class HotKeyManager {
     static var hotKey: HotKey? {
         didSet {
-            guard let hotKey = hotKey else { return }
+            guard let hotKey = hotKey else {
+                logWarning("HotKey cleared", category: "HotKeyManager")
+                return
+            }
+            
+            logInfo("HotKey registered: \(hotKey.keyCombo)", category: "HotKeyManager")
             
             hotKey.keyDownHandler = { [] in
+                logDebug("HotKey triggered, current policy: \(PreferenceManager.statusBarPolicy)", category: "HotKeyManager")
                 switch (PreferenceManager.statusBarPolicy) {
                 case (.collapsed):
+                    logInfo("Expanding status bar via hotkey", category: "HotKeyManager")
                     PreferenceManager.statusBarPolicy = .partialExpand
                 default:
+                    logInfo("Collapsing status bar via hotkey", category: "HotKeyManager")
                     PreferenceManager.statusBarPolicy = .collapsed
                 }
             }
@@ -26,10 +34,20 @@ class HotKeyManager {
     }
         
     public static func setup() {
-        guard let globalKey = PreferenceManager.globalKey else {return}
+        logInfo("Setting up HotKeyManager", category: "HotKeyManager")
+        guard let globalKey = PreferenceManager.globalKey else {
+            logWarning("No global key configured", category: "HotKeyManager")
+            return
+        }
+        logInfo("Configuring hotkey with keyCode: \(globalKey.keyCode), modifiers: \(globalKey.carbonFlags)", category: "HotKeyManager")
         hotKey = HotKey(keyCombo: KeyCombo(carbonKeyCode: globalKey.keyCode, carbonModifiers: globalKey.carbonFlags))
     }
     
     public static func finishUp() {
+        logInfo("HotKeyManager finishing up", category: "HotKeyManager")
+        if hotKey != nil {
+            logInfo("Clearing hotkey", category: "HotKeyManager")
+            hotKey = nil
+        }
     }
 }

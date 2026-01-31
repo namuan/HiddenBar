@@ -28,6 +28,22 @@ class StatusBarManager {
     private static let normalSepratorLength: CGFloat =  10
     private static let expandedSeperatorLength: CGFloat = 10000
 
+    private static let instance = StatusBarManager()
+
+    public static func setup() {
+        logInfo("Setting up StatusBarManager", category: "StatusBarManager")
+        _ = instance
+
+        NotificationCenter.default.addObserver(forName: NotificationNames.prefsChanged, object: nil, queue: Global.mainQueue) { [] _ in
+            logDebug("Preferences changed notification received", category: "StatusBarManager")
+            triggerAdjustment()
+        }
+
+        // Manually adjusting the bar once
+        logInfo("Triggering initial adjustment", category: "StatusBarManager")
+        triggerAdjustment()
+    }
+
     public static func areSeperatorPositionValid () -> StatusBarValidity {
         guard
             let toggleButtonX = instance.masterToggle.button?.getOrigin?.x,
@@ -45,61 +61,68 @@ class StatusBarManager {
         }
     }
 
-    @objc private static func toggleButtonPressed(sender: NSStatusBarButton) {
+    @objc private func toggleButtonPressed(sender: NSStatusBarButton) {
         if let event = NSApp.currentEvent {
             
             let isOptionKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.option)
             let isControlKeyPressed = event.modifierFlags.contains(NSEvent.ModifierFlags.control)
             
+            logDebug("Toggle button pressed - eventType: \(event.type.rawValue), option: \(isOptionKeyPressed), control: \(isControlKeyPressed)", category: "StatusBarManager")
+            
             switch (event.type, isOptionKeyPressed, isControlKeyPressed) {
             case (NSEvent.EventType.leftMouseUp, false, false):
+                logInfo("Left click: toggling between collapsed and partial expand", category: "StatusBarManager")
                 if (PreferenceManager.statusBarPolicy != .collapsed) {PreferenceManager.statusBarPolicy  = .collapsed}
                 else {PreferenceManager.statusBarPolicy = .partialExpand}
                 PreferenceManager.isEditMode = false
             case (NSEvent.EventType.leftMouseUp, true, false):
+                logInfo("Option+Left click: toggling between collapsed and full expand", category: "StatusBarManager")
                 if (PreferenceManager.statusBarPolicy != .collapsed) {PreferenceManager.statusBarPolicy  = .collapsed}
                 else {PreferenceManager.statusBarPolicy = .fullExpand}
                 PreferenceManager.isEditMode = false
             case (NSEvent.EventType.rightMouseUp, _, _):
                 fallthrough
             case (NSEvent.EventType.leftMouseUp, _, true):
+                logInfo("Right click or Control+Left click: showing context menu", category: "StatusBarManager")
                 ContextMenuManager.showContextMenu(sender)
             default:
+                logDebug("Unhandled event type", category: "StatusBarManager")
                 break
             }
         }
     }
-    
-    private static let instance = StatusBarManager()
+
     private init() {
+        logInfo("Initializing StatusBarManager", category: "StatusBarManager")
+        
         if let button = masterToggle.button {
             button.image = AssetManager.expandImage
+            logDebug("Master toggle button configured", category: "StatusBarManager")
         }
         
         if let button = primarySeprator.button {
             button.image = AssetManager.seperatorImage
+            logDebug("Primary separator configured", category: "StatusBarManager")
         }
         
         if let button = secondarySeprator.button {
             button.image = AssetManager.seperatorImage
             button.appearsDisabled = true
+            logDebug("Secondary separator configured", category: "StatusBarManager")
         }
         masterToggle.autosaveName = "hiddenbar_masterToggle";
         primarySeprator.autosaveName = "hiddenbar_primarySeprator";
-        secondarySeprator.autosaveName = "hiddenbar_secondarySeprator";
-        NSLog("Status bar controller inited.")
-    }
-    
-    public static func setup() {
+        logInfo("Setting up StatusBarManager", category: "StatusBarManager")
         
-        let masterToggle = instance.masterToggle,
-        primarySeprator = instance.primarySeprator,
-        secondarySeprator = instance.secondarySeprator
+        let masterToggle = self.masterToggle,
+        primarySeprator = self.primarySeprator,
+        secondarySeprator = self.secondarySeprator
         
         if let button = masterToggle.button {
             button.target = self
             button.action = #selector(toggleButtonPressed(sender:))
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
+            logDebug("Master toggle actions configured", category: "StatusBarManager")
         }
         // This won't work: blocking action to be sent.
         //let menu = StatusBarMenuManager.getContextMenu()
@@ -108,35 +131,41 @@ class StatusBarManager {
         masterToggle.isVisible = true
         primarySeprator.isVisible = true
         secondarySeprator.isVisible = true
-
-        NotificationCenter.default.addObserver(forName: NotificationNames.prefsChanged, object: nil, queue: Global.mainQueue) {[] (notification) in
-            triggerAdjustment()
-        }
+        logInfo("Status bar items made visible", category: "StatusBarManager")
+    }
+    
+    public static func finishUp() {
+        logInfo("StatusBarManager finishing up", category: "StatusBarManager")
         
         // Manually adjusting the bar once
         triggerAdjustment()
     }
     
-    public static func finishUp() {
-    }
-    
     private static func triggerAdjustment() {
-        switch areSeperatorPositionValid() {
+        let validity = areSeperatorPositionValid()
+        logDebug("Triggering adjustment, separator position validity: \(validity)", category: "StatusBarManager")
+        
+        switch validity {
         case .onStartUp:
+            logWarning("Separators not ready yet (on startup), scheduling retry in 1s", category: "StatusBarManager")
             Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
                 // retry on more time after 1s
+                logDebug("Retrying separator adjustment after startup delay", category: "StatusBarManager")
                 NotificationCenter.default.post(Notification(name: NotificationNames.prefsChanged, object: PreferenceManager.isAutoStart))
             }
             fallthrough
         case .valid:
+            logDebug("Separator positions valid, adjusting status bar", category: "StatusBarManager")
             resetAutoCollapseTimer()
             adjustStatusBar()
         case .invalid:
+            logError("Separator positions invalid, resetting", category: "StatusBarManager")
             resetSeperator()
         }
     }
     
     private static func resetSeperator () {
+        logWarning("Resetting separators to default state", category: "StatusBarManager")
         let masterToggle = instance.masterToggle,
             primarySeprator = instance.primarySeprator,
             secondarySeprator = instance.secondarySeprator,
@@ -147,6 +176,7 @@ class StatusBarManager {
         masterToggle.button?.image = AssetManager.collapseImage
         masterToggle.button?.title = "Invalid".localized
         lock.unlock()
+        logWarning("Separators reset complete", category: "StatusBarManager")
     }
     
     private static func resetAutoCollapseTimer () {
@@ -154,21 +184,24 @@ class StatusBarManager {
         do {
             lock.lock(before: Date(timeIntervalSinceNow: 1))
             defer {lock.unlock()}
-            //NSLog("Timer Cancelled:\(String(describing: instance.autoCollapseTimer)).")
+            
             instance.autoCollapseTimer?.invalidate()
+            
             switch (PreferenceManager.isAutoHide, PreferenceManager.isEditMode, PreferenceManager.statusBarPolicy) {
             case (false, _, _), (_, true, _), (_, _, .collapsed):
+                logDebug("Auto-collapse timer not needed (autoHide=\(PreferenceManager.isAutoHide), editMode=\(PreferenceManager.isEditMode), policy=\(PreferenceManager.statusBarPolicy))", category: "StatusBarManager")
                 return
             default:
                 break
             }
-            let timer = Timer(timeInterval: TimeInterval(PreferenceManager.numberOfSecondForAutoHide), repeats: false) {
+            let interval = PreferenceManager.numberOfSecondForAutoHide
+            logInfo("Setting auto-collapse timer for \(interval) seconds", category: "StatusBarManager")
+            let timer = Timer(timeInterval: TimeInterval(interval), repeats: false) {
                 [] (timer:Timer) in
-                //NSLog("Timer Triggered:\(timer).")
+                logInfo("Auto-collapse timer triggered, collapsing status bar", category: "StatusBarManager")
                 PreferenceManager.statusBarPolicy = .collapsed
                 return
             }
-            //NSLog("Timer Dispatched:\(timer).")
             Global.runLoop.add(timer, forMode: .common)
             instance.autoCollapseTimer = timer
         }
@@ -181,7 +214,9 @@ class StatusBarManager {
             lock = instance.updateLock
         
         lock.lock(before: Date(timeIntervalSinceNow: 1))
+        
         if PreferenceManager.isEditMode {
+            logInfo("Adjusting status bar for EDIT mode", category: "StatusBarManager")
             primarySeprator.length = StatusBarManager.normalSepratorLength
             //primarySeprator.isVisible = true
             secondarySeprator.length = StatusBarManager.normalSepratorLength
@@ -191,8 +226,12 @@ class StatusBarManager {
             
         }
         else {
-            switch PreferenceManager.statusBarPolicy {
+            let policy = PreferenceManager.statusBarPolicy
+            logInfo("Adjusting status bar for policy: \(policy)", category: "StatusBarManager")
+            
+            switch policy {
             case .fullExpand:
+                logDebug("Setting full expand state", category: "StatusBarManager")
                 primarySeprator.length = StatusBarManager.hiddenSepratorLength
                 //primarySeprator.isVisible = false
                 secondarySeprator.length = StatusBarManager.hiddenSepratorLength
@@ -201,6 +240,7 @@ class StatusBarManager {
                 masterToggle.button?.title = ""
                 
             case .partialExpand:
+                logDebug("Setting partial expand state", category: "StatusBarManager")
                 primarySeprator.length = StatusBarManager.hiddenSepratorLength
                 //primarySeprator.isVisible = false
                 secondarySeprator.length = StatusBarManager.expandedSeperatorLength
@@ -209,6 +249,7 @@ class StatusBarManager {
                 masterToggle.button?.title = ""
                 
             case .collapsed:
+                logDebug("Setting collapsed state", category: "StatusBarManager")
                 primarySeprator.length = StatusBarManager.expandedSeperatorLength
                 //primarySeprator.isVisible = true
                 secondarySeprator.length = StatusBarManager.expandedSeperatorLength
@@ -221,4 +262,3 @@ class StatusBarManager {
         lock.unlock()
     }
 }
-

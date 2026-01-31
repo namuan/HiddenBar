@@ -24,6 +24,7 @@
 		929113FC21F9D04200173149 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 929113FA21F9D04200173149 /* Main.storyboard */; };
 		92C5057F21FEC24C0084719A /* ServiceManagement.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92C5057E21FEC24C0084719A /* ServiceManagement.framework */; };
 		92C5058121FEC2590084719A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92C5058021FEC2590084719A /* Cocoa.framework */; };
+		92C97B86220032EE0007559D /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C97B85220032EE0007559D /* Logger.swift */; };
 		92C97B88220032ED0007559C /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C97B87220032ED0007559C /* Util.swift */; };
 		92C97B8B220049D20007559C /* NSBarButtonItem+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C97B8A220049D10007559C /* NSBarButtonItem+Extension.swift */; };
 		92C97B8D220058740007559C /* NSView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C97B8C220058740007559C /* NSView+Extension.swift */; };
@@ -73,6 +74,7 @@
 		929113FD21F9D04200173149 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		92C5057E21FEC24C0084719A /* ServiceManagement.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ServiceManagement.framework; path = System/Library/Frameworks/ServiceManagement.framework; sourceTree = SDKROOT; };
 		92C5058021FEC2590084719A /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		92C97B85220032EE0007559D /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		92C97B87220032ED0007559C /* Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		92C97B8A220049D10007559C /* NSBarButtonItem+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSBarButtonItem+Extension.swift"; sourceTree = "<group>"; };
 		92C97B8C220058740007559C /* NSView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSView+Extension.swift"; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 		9267D3212201A49200EFFCE2 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				92C97B85220032EE0007559D /* Logger.swift */,
 				92C97B87220032ED0007559C /* Util.swift */,
 				FB1660832A12E668008C6B3C /* ProductGlobal.swift */,
 			);
@@ -356,6 +359,7 @@
 				08B9F32C2411883300AA0551 /* NSWindow+Extension.swift in Sources */,
 				929113F521F9D04100173149 /* AppDelegate.swift in Sources */,
 				08C20FDE23AABDD10035D978 /* HyperlinkTextField.swift in Sources */,
+				92C97B86220032EE0007559D /* Logger.swift in Sources */,
 				92C97B88220032ED0007559C /* Util.swift in Sources */,
 				967F4B2524169BC800F18D3C /* String+Extension.swift in Sources */,
 				FB1660812A12D3F4008C6B3C /* ProjectGlobal.swift in Sources */,
@@ -560,7 +564,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 19;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 47HK3524RN;
+				DEVELOPMENT_TEAM = Z8242PZ338;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = HiddenBar/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -588,7 +592,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 19;
 				DEAD_CODE_STRIPPING = YES;
-				DEVELOPMENT_TEAM = 47HK3524RN;
+				DEVELOPMENT_TEAM = Z8242PZ338;
 				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = HiddenBar/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
